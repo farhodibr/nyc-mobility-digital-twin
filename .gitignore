@@ -1,0 +1,12 @@
+.env
+.env.*
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.egg-info/
+.cache/
+data/
+models/
+replay-output/
+/docs/dataset-upload-inventory.csv
+/docs/dataset-staging-review.csv

@@ -1,0 +1,64 @@
+name: ride-demand
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+
+  # Processing
+  - polars
+  - duckdb
+  - python-duckdb
+  - pyarrow
+  - pandas
+  - geopandas
+  - shapely
+  - pyproj
+
+  # Storage / DB
+  - sqlalchemy
+  - psycopg2
+
+  # Orchestration
+  - prefect
+
+  # ML
+  - scikit-learn
+  - scipy
+  - statsmodels
+  - lightgbm
+  - catboost
+  - xgboost
+  - optuna
+  - mlflow
+
+  # API
+  - fastapi
+  - pydantic
+  - uvicorn
+
+  # Dashboard
+  - streamlit
+  - plotly
+  - pydeck
+
+  # Notebooks
+  - jupyterlab
+  - ipykernel
+  - matplotlib
+  - seaborn
+  - markdown
+  - psutil
+
+  # Ops / dev tooling
+  - pytest
+  - pytest-cov
+  - ruff
+  - mypy
+  - pre-commit
+  - structlog
+  - python-dotenv
+  - requests
+
+  - pip
+  - pip:
+      - types-requests
