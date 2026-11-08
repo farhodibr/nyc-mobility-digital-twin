@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore NYC completed ride activity through a July 2026 historical replay. Choose a taxi zone, inspect six future hours, and advance the simulation clock.">
+  <meta name="theme-color" content="#153f38">
+  <title>NYC Ride Forecast · CUNY SPS Capstone</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23153f38'/%3E%3Cpath d='M9 29V11h5l6 10 6-10h5v18h-5V19l-6 9-6-9v10' fill='%23d9ed9b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="forecast-focus.css"><script src="replay-core.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to replay</a>
+  <aside class="sidebar">
+    <a class="brand" href="./" aria-label="CUNY SPS Capstone Project home"><span class="brand-mark">R<span>↗</span></span><span>NYC Ride Forecast<span class="brand-sub">CUNY SPS CAPSTONE</span><span class="brand-degree">MS in Data Science</span></span></a>
+    <div class="project-label">THE WORKSPACE</div>
+    <nav aria-label="Workspace"><button class="nav-item active" id="replay-nav"><span>◫</span> July replay <b>01</b></button><button class="nav-item" data-panel="dataset"><span>▦</span> Dataset overview</button><button class="nav-item" data-panel="methods"><span>☷</span> How it works</button></nav>
+    <div class="sidebar-divider"></div><div class="project-label">THIS REPLAY</div>
+    <div class="side-fact"><span>Study month</span><strong>July 2026</strong></div><div class="side-fact"><span>Forecast horizons</span><strong>1–6 hours</strong></div><div class="side-fact"><span>Geographic scope</span><strong>262 NYC zones</strong></div>
+    <div class="side-note"><span class="small-dot"></span><strong>Historical simulation</strong><p>The clock moves through past data. This is not a live feed.</p></div>
+    <div class="sidebar-bottom"><span class="status-dot"></span> July forecasts ready<span class="side-footer">NYC Ride Forecast<br>Farhod Ibragimov · 2026</span></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar"><span class="breadcrumb">Workspace <span>/</span> <strong>Historical replay</strong></span><div class="topbar-right"><span class="private-label">JULY 2026</span><button class="text-button" data-panel="methods">About this simulation <span>↗</span></button></div></header>
+    <main id="main">
+      <div class="page-heading"><div><div class="eyebrow"><span></span> CUNY SPS · MS IN DATA SCIENCE · CAPSTONE PROJECT</div><h1>Forecasting combined Uber and Lyft rides in NYC</h1><p>A CUNY SPS capstone by Farhod Ibragimov. Explore hourly pickup forecasts, compare corrections, and replay July 2026 across NYC taxi zones.</p></div><span class="ready-badge"><span class="status-dot"></span> REPLAY READY</span></div>
+      <section class="control-panel" aria-label="Replay controls">
+        <div class="control-label"><span class="control-symbol">◷</span><div><strong>Set the forecast origin</strong><span>All times are New York time · EDT</span></div></div>
+        <div class="origin-controls"><label>Date<input type="date" id="origin-date" min="2026-07-01" max="2026-07-31" value="2026-07-01"></label><label>Issuance hour<select id="origin-hour"></select></label><button id="previous-origin" class="icon-button" aria-label="Previous forecast origin">←</button><button id="next-origin" class="icon-button" aria-label="Next forecast origin">→</button></div>
+      </section>
+      <section class="metrics" aria-label="Selected zone summary">
+        <article class="metric model-metric"><span class="metric-label">NEXT-HOUR XGBOOST FORECAST <span class="outline-dot"></span></span><div><strong id="model-summary">Loading…</strong><span id="model-unit" class="metric-unit">pickups</span></div><p id="model-note">Loading the frozen model's forecast…</p></article>
+        <article class="metric"><span class="metric-label">OBSERVED PICKUPS <span title="Counts available two hours after the pickup hour ends">↙</span></span><div><strong id="last-count">—</strong><span class="metric-unit">pickups</span></div><p id="last-period">Loading observed pickup period…</p><p id="last-availability" class="availability-note"></p></article>
+        <article class="metric"><span class="metric-label">SELECTED FORECAST WINDOW <span>↗</span></span><div><strong id="forecast-window">—</strong></div><p id="forecast-window-note">Six separate hourly target periods</p></article>
+      </section>
+      <div class="workspace-grid">
+        <section class="card map-card" aria-labelledby="map-title">
+          <div class="card-heading"><div><span class="section-kicker">01 / EXPLORE THE CITY</span><h2 id="map-title">Explore NYC pickup zones</h2></div><span class="tiny-tag">TLC ZONES</span></div>
+          <div class="zone-controls"><label for="zone-search" class="sr-only">Search taxi zones</label><div class="search-wrap"><span>⌕</span><input id="zone-search" type="search" placeholder="Search a zone or borough…" autocomplete="off"></div><label class="sr-only" for="zone-select">Selected taxi zone</label><select id="zone-select" aria-label="Selected taxi zone"></select></div>
+          <div class="map-container"><div class="map-hint">Click a zone to explore <span>↗</span></div><svg id="zone-map" viewBox="0 0 740 730" role="group" aria-label="Interactive NYC taxi-zone map"><title>NYC taxi zones, shaded by completed pickups in the latest available replay hour</title></svg><div class="north-marker">N <span>↑</span></div><div id="map-tooltip" role="status"></div><div class="water-label atlantic">ATLANTIC OCEAN</div></div>
+          <div class="map-legend"><span id="map-observed-period">Observed pickups</span><span class="legend-scale"><span>Fewer</span><i aria-hidden="true"></i><span>More</span></span></div>
+          <div class="selected-zone"><span class="zone-square"></span><div><strong id="selected-zone-name">Loading zones…</strong><span id="selected-zone-meta">—</span></div><span class="selected-arrow">↗</span></div>
+        </section>
+        <div class="right-column">
+          <section class="card outlook-card" aria-labelledby="outlook-title">
+            <div class="card-heading"><div><span class="section-kicker">02 / LOOK SIX HOURS AHEAD</span><h2 id="outlook-title">Six-hour pickup forecast</h2><p id="forecast-zone-context" class="forecast-zone-context" aria-live="polite"></p></div><button id="export-view" class="text-button download-button" title="Download the visible six-hour table as CSV">Export <span>↓</span></button></div>
+            <div class="forecast-mode-control"><label for="forecast-mode">Forecast option</label><select id="forecast-mode"><option value="1">Full rolling correction</option><option value="0.25">Damped correction (25%)</option><option value="0">Original XGBoost</option></select><p id="correction-note"></p></div><label class="benchmark-toggle" for="show-benchmark"><input type="checkbox" id="show-benchmark"> Show same-hour-last-week benchmark</label><div class="chart-legend"><span><i class="legend-line forecast"></i> Forecast <small id="forecast-legend-note">loading</small></span><span class="benchmark-column" hidden><i class="legend-line reference"></i> Weekly benchmark</span><span><i class="legend-line actual"></i> Revealed actuals</span></div>
+            <div class="chart-wrapper"><div class="chart-unit">COMPLETED PICKUPS</div><svg id="outlook-chart" viewBox="0 0 680 270" role="img" aria-label="Six-hour pickup reference and revealed actuals"></svg></div>
+            <div class="clock-panel"><div class="clock-heading"><span><span class="status-dot"></span> SIMULATED CLOCK</span><strong id="clock-display">Jul 1 · 12:00 AM</strong></div><div class="clock-controls"><button id="clock-reset" class="icon-button" title="Reset to issuance" aria-label="Reset replay clock">↺</button><label for="clock-range" class="sr-only">Hours elapsed since issuance</label><input id="clock-range" type="range" min="0" max="9" step="1" value="0"><button id="clock-step" class="advance-button">Advance +1h <span>→</span></button></div><p id="reveal-message" aria-live="polite">Actuals appear two hours after each target hour ends.</p></div>
+            <div class="table-wrap"><table><thead><tr><th>Target hour</th><th>Selected forecast</th><th class="benchmark-column" hidden>Weekly benchmark</th><th>Actual</th></tr></thead><tbody id="hour-table"></tbody></table></div>
+          </section>
+          <section class="card inputs-card" aria-labelledby="inputs-title"><div class="inputs-heading"><div><span class="section-kicker">03 / UNDER THE HOOD</span><h2 id="inputs-title">What goes into the forecast?</h2></div><span class="tiny-tag">HORIZON 1</span></div><div class="input-grid"><div><span>Yesterday, same hour</span><strong id="lag-day">—</strong></div><div><span>Last week, same hour</span><strong id="lag-week">—</strong></div><div><span>Two weeks earlier</span><strong id="lag-two-week">—</strong></div><div><span>Forecast temperature</span><strong id="weather-temperature">—</strong></div><div><span>Hourly forecast precipitation</span><strong id="weather-precipitation">—</strong></div><div><span>Sports indicator</span><strong id="sports-context" class="event-value">—</strong></div><div><span>Concert indicator</span><strong id="concert-context" class="event-value">—</strong></div></div><div class="input-foot"><span id="input-context">30 predictors · archived forecast weather</span><button class="text-button" data-panel="methods">See the method ↗</button></div></section>
+        </div>
+      </div>
+      <section class="next-step-banner"><div class="banner-icon">↗</div><div><strong id="forecast-banner-title">Forecasts across the July replay.</strong><p id="forecast-banner-note">Explore 738 hourly origins across 262 NYC zones. Compare original and rolling-corrected forecasts under simulated data availability.</p></div><button id="show-model-origin" class="import-button">Return to July 1 ↗</button><label class="import-button" for="forecast-file">Load forecast CSV <span>↑</span></label><input id="forecast-file" type="file" accept=".csv,text/csv" class="sr-only"></section>
+      <div id="notification" role="status" aria-live="polite"></div>
+      <footer><span>Farhod Ibragimov <span class="footer-divider">/</span> CUNY SPS · MS in Data Science Capstone · 2026</span><button class="text-button" data-panel="sources">Data & sources ↗</button></footer>
+    </main>
+  </div>
+  <dialog id="info-dialog"><div class="dialog-top"><span class="section-kicker">CUNY SPS CAPSTONE PROJECT</span><button id="close-dialog" class="icon-button" aria-label="Close dialog">✕</button></div><div id="dialog-content"></div></dialog>
+  <div id="loading" class="loading-overlay"><span class="brand-mark">R<span>↗</span></span><h2>Bringing July into view.</h2><p>Loading the validated historical replay…</p></div>
+</body>
+</html>
