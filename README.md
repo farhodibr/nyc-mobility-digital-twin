@@ -8,6 +8,8 @@ This was my CUNY SPS capstone. I built an hourly forecasting pipeline for NYC ta
 
 ## Try the July replay
 
+[Open the live July replay](https://farhodibr.github.io/nyc-mobility-digital-twin/)
+
 Pick a taxi zone, move through July 2026, and compare the original XGBoost forecast with two versions that adjust for recent errors. I only let the replay use actual pickup counts once they would have become available. That matters because a correction that uses a count too early can look better than it would have worked in practice.
 
 From the project folder, run this command and open [localhost:8000](http://localhost:8000) in your browser. The replay assets are included.
