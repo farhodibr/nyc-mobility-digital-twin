@@ -4,7 +4,7 @@ I started this project with a question. How much can I tell about ride pickups i
 
 I originally called what I was forecasting ride demand. I hadn't accounted for someone who sees a high fare or a longer wait than they expected and decides against taking the ride. A completed-trip record can't tell me how many people made that choice. I call my target **completed pickups** because that's what I can count.
 
-This was my CUNY SPS capstone. I built an hourly forecasting pipeline for NYC taxi zones and a separate analysis of measured subway service loss. The July replay is where I put the forecasts, the actual pickup counts, and the timing of those counts together.
+This is my CUNY SPS MS in Data Science capstone project. I built an hourly forecasting pipeline for NYC taxi zones and a separate causal analysis of measured subway service loss. The July replay is where I put the forecasts, the actual pickup counts, and the timing of those counts together.
 
 ## Try the July replay
 
