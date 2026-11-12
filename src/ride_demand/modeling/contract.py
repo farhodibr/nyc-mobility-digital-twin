@@ -1,4 +1,4 @@
-"""Loading and validating the frozen model feature contract."""
+"""Load and validate the frozen model feature contract."""
 
 import json
 from dataclasses import dataclass
@@ -21,7 +21,7 @@ CATEGORICAL_LEVELS: Final[dict[str, tuple[int, ...]]] = {
 
 @dataclass(frozen=True)
 class FeatureContract:
-    """Preserving the ordered features expected by the saved model."""
+    """Ordered features and types expected by the saved model."""
 
     feature_names: tuple[str, ...]
     feature_types: tuple[str, ...]
@@ -29,12 +29,12 @@ class FeatureContract:
 
     @property
     def feature_count(self) -> int:
-        """Returning the number of required model features."""
+        """Return the number of required model features."""
         return len(self.feature_names)
 
 
 def load_feature_contract(path: Path) -> FeatureContract:
-    """Loading and structurally validating a saved feature contract."""
+    """Load and structurally validate a saved feature contract."""
 
     payload = cast(
         dict[str, object],
@@ -86,7 +86,7 @@ def validate_feature_columns(
     columns: list[str] | tuple[str, ...],
     contract: FeatureContract,
 ) -> None:
-    """Checking model-input names and order against the contract."""
+    """Check model-input names and order against the contract."""
 
     actual_columns = tuple(columns)
 
@@ -99,7 +99,7 @@ def validate_feature_columns(
 def get_categorical_feature_names(
     contract: FeatureContract,
 ) -> tuple[str, ...]:
-    """Returning features XGBoost treats as categorical."""
+    """Return features XGBoost treats as categorical."""
     names = contract.feature_names
     categories = contract.feature_types
     categorical_features = tuple(

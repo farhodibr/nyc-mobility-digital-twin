@@ -32,7 +32,7 @@ availability remains unverified. Completed pickups do not measure unmet requests
 
 ## Reproduce
 
-From the showcase root, use the ride-demand environment and the prepared datasets and model:
+From the project root, use the ride-demand environment and the prepared datasets and model:
 
 ```powershell
 python scripts/predict_full_july.py --output-dir replay-output
@@ -47,11 +47,10 @@ rounded to three decimals; full-precision predictions stay in the offline artifa
 Copy the generated `july-forecasts.json` to `website/dist/` to update forecasts.
 `export_data.py` only rebuilds prepared counts/weather, not forecasts.
 Run `node website/check-site.cjs` to verify forecast coverage, mode calculations,
-publication timing, import rules, branding and DOM references.
+publication timing, import rules, page labels and DOM references.
 
 The six-hour CSV export includes original predictions, rolling correction,
 selected correction strength and only already-revealed actuals. Imported CSV
 predictions are used as supplied without another correction.
 
-The existing Site project ID and private audience are preserved. No raw trips,
-credentials or model weights are included in the browser deployment.
+No raw trips, credentials or model weights are included in the browser deployment.
