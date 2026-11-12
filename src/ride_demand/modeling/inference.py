@@ -1,4 +1,4 @@
-"""Loading verified XGBoost models for inference."""
+"""Load verified XGBoost models for inference."""
 
 from pathlib import Path
 
@@ -28,7 +28,7 @@ def load_verified_booster(
     model_path: Path,
     metadata_path: Path,
 ) -> xgb.Booster:
-    """Loading an XGBoost model only after integrity verification."""
+    """Load an XGBoost model only after integrity verification."""
 
     expected_sha256 = load_expected_sha256(metadata_path)
 
@@ -45,7 +45,7 @@ def prepare_feature_frame(
     frame: pd.DataFrame,
     contract: FeatureContract,
 ) -> pd.DataFrame:
-    """Validating and copying a model-input feature frame."""
+    """Validate and copy a model-input feature frame."""
 
     frame_columns = frame.columns.tolist()
 
@@ -65,7 +65,7 @@ def build_feature_matrix(
     frame: pd.DataFrame,
     contract: FeatureContract,
 ) -> xgb.DMatrix:
-    """Building a validated XGBoost inference matrix."""
+    """Build a validated XGBoost inference matrix."""
 
     prepared_frame = prepare_feature_frame(
         frame,
@@ -85,7 +85,7 @@ def build_feature_matrix(
 def validate_categorical_values(
     frame: pd.DataFrame,
 ) -> None:
-    """Rejecting categorical values absent from the training contract."""
+    """Reject categorical values absent from the training contract."""
 
     for feature_name, allowed_levels in CATEGORICAL_LEVELS.items():
         if frame[feature_name].isna().any():
@@ -105,7 +105,7 @@ def validate_categorical_values(
 def convert_categorical_columns(
     frame: pd.DataFrame,
 ) -> pd.DataFrame:
-    """Converting validated features to fixed pandas categories."""
+    """Convert validated features to fixed pandas categories."""
 
     validate_categorical_values(frame)
 
@@ -125,7 +125,7 @@ def predict_demand(
     frame: pd.DataFrame,
     contract: FeatureContract,
 ) -> npt.NDArray[np.float32]:
-    """Predicting demand and clipping negative values to zero."""
+    """Predict pickups and clip negative values to zero."""
 
     feature_matrix = build_feature_matrix(
         frame,

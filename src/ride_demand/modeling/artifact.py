@@ -1,4 +1,4 @@
-"""Validating saved model artifacts before inference."""
+"""Validate saved model artifacts before inference."""
 
 import hashlib
 import json
@@ -10,7 +10,7 @@ def calculate_sha256(
     path: Path,
     chunk_size: int = 1024 * 1024,
 ) -> str:
-    """Calculating a file checksum without loading it all at once."""
+    """Calculate a file checksum without loading it all at once."""
 
     if chunk_size <= 0:
         raise ValueError("chunk_size must be greater than zero.")
@@ -32,7 +32,7 @@ def verify_sha256(
     path: Path,
     expected_sha256: str,
 ) -> str:
-    """Verifying a file against its expected SHA-256 value."""
+    """Verify a file against its expected SHA-256 value."""
 
     actual_sha256 = calculate_sha256(path)
 
@@ -45,7 +45,7 @@ def verify_sha256(
 def load_expected_sha256(
     metadata_path: Path,
 ) -> str:
-    """Loading the expected model checksum from metadata."""
+    """Load the expected model checksum from metadata."""
 
     payload = cast(
         dict[str, object],

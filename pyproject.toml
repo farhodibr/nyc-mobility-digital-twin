@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["ruff", "mypy", "pytest", "pytest-cov", "pre-commit"]
+dev = ["ruff", "mypy", "pytest"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

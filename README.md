@@ -38,6 +38,7 @@ conda env create -f environment.yml
 conda activate ride-demand
 python -m pip install -e . huggingface_hub
 python tools/download_data.py
+python -m pytest
 jupyter lab
 ```
 
