@@ -82,6 +82,22 @@
     if(state.showBenchmark)series('reference','chart-baseline','#92a08b');series('prediction','chart-model','#35659a');series('actual','chart-actual','#d78d4c');
     svg.setAttribute('aria-label',`Six-hour view for ${zone().name}. ${state.showBenchmark?'Weekly benchmark: '+data.map(r=>r.reference).join(', ')+'.':''} XGBoost forecasts: ${data.map(r=>r.prediction===null?'not generated':r.prediction.toFixed(1)).join(', ')}. ${data.filter(r=>r.actual!==null).length} actual hours revealed.`);
   }
+  function renderHistory(){
+    const svg=$('history-chart'),last=observedHour();
+    svg.replaceChildren();
+    const values=Array.from({length:24},(_,i)=>C.value(state.data,state.zone,last-23+i));
+    const top=Math.max(10,...values)*1.15;
+    const x=i=>48+i*606/23,y=v=>175-v/top*145;
+    for(let i=0;i<4;i++){
+      const value=top*i/3;
+      svg.append(element('line',{x1:48,x2:654,y1:y(value),y2:y(value),class:'chart-grid'}));
+      svg.append(element('text',{x:40,y:y(value)+4,'text-anchor':'end',class:'chart-tick'},int(Math.round(value))));
+    }
+    svg.append(element('polyline',{points:values.map((v,i)=>`${x(i)},${y(v)}`).join(' '),fill:'none',stroke:'#285e4c','stroke-width':2.5}));
+    for(const i of [0,6,12,18,23])svg.append(element('text',{x:x(i),y:205,'text-anchor':'middle',class:'chart-tick'},shortTime(last-23+i)));
+    $('history-note').textContent=`${zone().name} · Latest count: ${int(values[23])} pickups for ${hourRange(last)}. Each count is released two hours after its hour ends.`;
+    svg.setAttribute('aria-label',`Available history for ${zone().name}: ${values.join(', ')} pickups. Last hour ${hourRange(last)}.`);
+  }
   function renderTable(data){
     const body=$('hour-table');body.replaceChildren();
     for(const row of data){
@@ -98,15 +114,21 @@
     for(const option of $('origin-hour').options)option.disabled=time.slice(0,10)==='2026-07-31'&&Number(option.value)>17;
     $('previous-origin').disabled=state.origin===0;$('next-origin').disabled=state.origin===737;
     $('zone-select').value=state.zone;
-    $('last-count').textContent=int(C.value(state.data,state.zone,origin+state.elapsed-3));
-    $('last-period').textContent=hourRange(observedHour());
-    $('last-availability').textContent=`Available ${dateLabel(observedHour()+3)} · ${shortTime(observedHour()+3)} EDT — simulated 2h after the hour ends.`;
-    $('forecast-window').textContent=`${shortTime(origin+1)}–${shortTime(origin+7)}`;
-    $('forecast-window-note').textContent=`${dateLabel(origin+1)} · six separate hourly targets`;
+    const first=data[0],available=first.actual!==null;
+    $('last-count').textContent=available?int(first.actual):'Pending';
+    $('last-period').textContent=hourRange(first.target);
+    $('last-availability').textContent=available
+      ?`Released at ${dateLabel(first.target+3)} · ${timeAt(first.target+3)} EDT. Same hour as the forecast.`
+      :`Available at ${dateLabel(first.target+3)} · ${timeAt(first.target+3)} EDT. Advance the clock to reveal this count.`;
+    const error=available&&first.prediction!==null?first.actual-first.prediction:null;
+    $('forecast-window').textContent=error===null?'Pending':`${error>0?'+':''}${error.toFixed(1)}`;
+    $('forecast-window-note').textContent=error===null
+      ?'The difference appears when this hour’s actual count is released.'
+      :error===0?'Forecast matched the actual count.':error>0?'More pickups than forecast.':'Fewer pickups than forecast.';
     const predicted=data.filter(r=>r.prediction!==null);
     $('model-summary').textContent=data[0].prediction!==null?data[0].prediction.toFixed(1):'Not generated';
     $('model-unit').textContent=data[0].prediction!==null?'pickups':'';
-    $('model-note').textContent=data[0].prediction!==null?`${dateLabel(origin+1)} · ${shortTime(origin+1)}–${shortTime(origin+2)} · ${state.forecastSource}`:'This origin has no model forecast yet.';
+    $('model-note').textContent=data[0].prediction!==null?`${hourRange(first.target)} · Made ${dateLabel(origin)} at ${timeAt(origin)} EDT · ${state.forecastSource}`:'This origin has no model forecast yet.';
     $('forecast-legend-note').textContent=predicted.length?`${predicted.length}/6 hours`:'not generated';
     $('forecast-banner-title').textContent=predicted.length?'XGBoost forecasts are ready for this origin.':'No XGBoost forecasts for this origin yet.';
     $('forecast-banner-note').textContent=state.forecastSource==='CSV import'?'The displayed model values came from your forecast CSV. Actuals follow the simulated two-hour publication delay.':'All 738 prepared July origins have six forecasts for each of 262 NYC zones. The last origin is July 31 at 5 PM so target hours remain within July. This is a retrospective simulation, not a live feed.';
@@ -127,7 +149,7 @@
     let context=`For ${hourRange(origin+1)} · forecast run ${state.data.runAges[state.origin]}h old · ${w.w[position].toFixed(1)} mph wind`;
     $('input-context').textContent=context;
     for(const node of document.querySelectorAll('.benchmark-column'))node.hidden=!state.showBenchmark;
-    renderMap();renderChart(data);renderTable(data);
+    renderMap();renderChart(data);renderTable(data);renderHistory();
   }
   function exportView(){
     const header=['forecast_origin_utc','location_id','forecast_horizon','target_hour_local','same_hour_last_week','prediction','original_prediction','rolling_correction','correction_strength','revealed_actual','simulation_clock_local'];
